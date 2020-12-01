@@ -8,7 +8,7 @@ extern "C" {
 #include "ads129x.h"
  
 #define DEVICE_ID               0
-#define SERVER_IP               "163.143.158.127"
+#define SERVER_IP               "163.143.136.126"//"163.143.158.127"
 #define SERVER_PORT             6000
 #define SERVER_DATA_NUM         100        //sent data packets within one communication, interval = SERVER_DATA_NUM/sampling_rate seconds
 #define SERVER_DATA_PRECISION   6
