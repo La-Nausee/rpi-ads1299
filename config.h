@@ -10,7 +10,7 @@ extern "C" {
 #define DEVICE_ID               0
 #define SERVER_IP               "163.143.158.127"
 #define SERVER_PORT             6000
-#define SERVER_DATA_NUM         1000        //sent data packets within one communication, interval = SERVER_DATA_NUM/sampling_rate seconds
+#define SERVER_DATA_NUM         100      //sent data packets within one communication, interval = SERVER_DATA_NUM/sampling_rate seconds
 #define SERVER_DATA_PRECISION   6
 #define SPI_SPEED               4000000  //0 ~ 20 MHz
 #define ADS_DRDY_PIN            9
