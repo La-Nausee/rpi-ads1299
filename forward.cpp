@@ -59,6 +59,8 @@ void *ads_thread(void *threadid)
     string* data_str = new string();
     struct timeval te;
 
+    stringstream in;
+
     wiringPiSetup();
     
     if(wiringPiISR(ADS_DRDY_PIN,INT_EDGE_FALLING,&ads_handler) < 0)
@@ -147,34 +149,52 @@ void *ads_thread(void *threadid)
 
             if(data_str_counter-- > 0)
             {
-                stringstream in;
-                in<<"{\"id\":"<<DEVICE_ID<<",";
+                // in<<"{\"id\":"<<DEVICE_ID<<",";
                 // in<<"\"ts\":"<<(unsigned long)time(NULL)<<",";
-                in<<"\"sec\":"<<te.tv_sec<<",";
-                in<<"\"usec\":"<<te.tv_usec<<",";
-                in<<"\"frame\":"<<frame_counter++<<",";
-                in<<"\"data\":\""<<std::setprecision(SERVER_DATA_PRECISION)<<ddata[0];
-                for(int i=1; i<8; i++)
+                // in<<"\"sec\":"<<te.tv_sec<<",";
+                // in<<"\"usec\":"<<te.tv_usec<<",";
+                // in<<"\"frame\":"<<frame_counter++<<",";
+                // in<<"\"data\":\""<<std::setprecision(SERVER_DATA_PRECISION)<<ddata[0];
+                int i = 0;
+                frame_counter++;
+                while(i < 7)
                 {
-                    in<<","<<std::setprecision(SERVER_DATA_PRECISION)<<ddata[i];
+                    in<<std::setprecision(SERVER_DATA_PRECISION)<<ddata[i++]<<",";
                 }
-                in<<"\"}";
-                in<<"\r\n";
+
+                in<<std::setprecision(SERVER_DATA_PRECISION)<<ddata[i];
+                // in<<"\"}";
+                // in<<"\r\n";
 
                 //below in hex format
 
-                data_str->append(in.str());
+                // data_str->append(in.str());
             }  
 
             if(data_str_counter <= 0)
             {
-                data_str_counter = SERVER_DATA_NUM;
+
+                in<<"\"}";
+                in<<"\r\n";
+                data_str->append(in.str());
 
                 forward_mutex.lock();
                 forward_queue.push(data_str);
                 forward_mutex.unlock();
+
+                data_str_counter = SERVER_DATA_NUM;
                 data_str = new string();
+                in.str("");
+                in<<"{\"id\":"<<DEVICE_ID<<",";
+                in<<"\"ts\":"<<(unsigned long)time(NULL)<<",";
+                in<<"\"sec\":"<<te.tv_sec<<",";
+                in<<"\"data\":\"";
             }  
+            else
+            {
+                in<<",";
+            }
+            
         }
 
         m_mutex.lock();
