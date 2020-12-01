@@ -55,7 +55,7 @@ void *ads_thread(void *threadid)
     unsigned char buffer[27];
     double ddata[8]; // 8 chs converted data in double
     unsigned int frame_counter = 0;
-    int     data_str_counter = SERVER_DATA_NUM;
+    int     data_str_counter = 0;
     string* data_str = new string();
     struct timeval te;
 
